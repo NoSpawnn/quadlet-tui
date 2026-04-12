@@ -1,6 +1,7 @@
 use crate::tui::app::App;
 
 pub mod app;
+mod components;
 pub mod event;
 pub mod ui;
 

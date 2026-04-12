@@ -1,3 +1,5 @@
+mod command_helpers;
+mod quadlet;
 mod tui;
 
 #[tokio::main]

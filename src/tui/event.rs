@@ -4,6 +4,8 @@ use futures::{FutureExt, StreamExt};
 use std::time::Duration;
 use tokio::sync::mpsc;
 
+use crate::tui::app::{FocusableWidget, Screen};
+
 /// Representation of all possible events.
 #[derive(Clone, Debug)]
 pub enum Event {
@@ -18,16 +20,38 @@ pub enum Event {
 }
 
 /// Application events.
-///
-/// You can extend this enum with your own custom events.
 #[derive(Clone, Debug)]
 pub enum AppEvent {
-    /// Increment the counter.
-    Increment,
-    /// Decrement the counter.
-    Decrement,
+    Navigate(Screen),
+    Focus(FocusableWidget),
+    Search(SearchEvent),
+
+    SelectNext,
+    SelectPrev,
+
+    ScrollLogsUp,
+    ScrollLogsDown,
+    ScrollLogsToTop,
+    ScrollLogsToBottom,
+    ScrollLogsRight,
+    ScrollLogsLeft,
+
+    RestartQuadlet(String),
+    RefreshQuadletList,
+
+    StartLogStream(String),
+    AppendLog(String, String), // (unit name, line)
     /// Quit the application.
     Quit,
+}
+
+#[derive(Clone, Debug)]
+pub enum SearchEvent {
+    Input(char),
+    MoveLeft,
+    MoveRight,
+    DeleteBackward,
+    DeleteForward,
 }
 
 /// Terminal event handler.
@@ -72,6 +96,10 @@ impl EventHandler {
         // Ignore the result as the reciever cannot be dropped while this struct still has a
         // reference to it
         let _ = self.sender.send(Event::App(app_event));
+    }
+
+    pub fn cloned_sender(&self) -> mpsc::UnboundedSender<Event> {
+        self.sender.clone()
     }
 }
 
