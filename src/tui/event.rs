@@ -88,8 +88,6 @@ impl EventTask {
     }
 
     /// Runs the event thread.
-    ///
-    /// This function emits tick events at a fixed rate and polls for crossterm events in between.
     async fn run(self) -> color_eyre::Result<()> {
         let mut reader = crossterm::event::EventStream::new();
         loop {

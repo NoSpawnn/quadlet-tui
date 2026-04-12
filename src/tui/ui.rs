@@ -5,7 +5,7 @@ use ratatui::{
     widgets::{Block, BorderType, Paragraph, Widget},
 };
 
-use crate::app::App;
+use crate::tui::app::App;
 
 impl Widget for &App {
     /// Renders the user interface widgets.
