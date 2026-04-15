@@ -7,7 +7,7 @@ use tokio::{
 
 use crate::{
     command_helpers::{journalctl, systemctl},
-    quadlet::types::{NetworkInfo, PodInfo, QuadletBasicInfo, QuadletDetailedInfo, QuadletKind},
+    quadlet::types::{QuadletBasicInfo, QuadletDetailedInfo, QuadletKind},
     tui::event::{AppEvent, Event},
 };
 

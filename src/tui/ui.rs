@@ -1,9 +1,9 @@
 use ratatui::{
     buffer::Buffer,
     layout::{Alignment, Constraint, Layout, Position, Rect},
-    style::{Color, Style, Stylize},
+    style::{Color, Stylize},
     text,
-    widgets::{Block, BorderType, ListState, Padding, Paragraph, StatefulWidget, Widget},
+    widgets::{Block, ListState, Padding, Paragraph, StatefulWidget, Widget},
 };
 
 use crate::{
@@ -114,6 +114,9 @@ impl App {
             QuadletDetailedInfo::Network(network_info) => {
                 detail_views::network(details_area, buf, &network_info)
             }
+            QuadletDetailedInfo::Container(container_info) => {
+                detail_views::container(details_area, buf, &container_info)
+            }
         };
 
         Widget::render(logs, logs_area, buf);
@@ -125,10 +128,11 @@ mod detail_views {
         buffer::Buffer,
         layout::{Constraint, Layout, Rect},
         style::Style,
+        text,
         widgets::{Block, Paragraph, Row, Table, Widget},
     };
 
-    use crate::quadlet::types::{NetworkInfo, PodInfo};
+    use crate::quadlet::types::{ContainerInfo, NetworkInfo, PodInfo};
 
     pub(super) fn pod<'a>(area: Rect, buf: &mut Buffer, pod: &'a PodInfo) {
         let sections = Layout::horizontal([Constraint::Fill(1), Constraint::Fill(1)]).split(area);
@@ -181,5 +185,18 @@ mod detail_views {
         };
 
         Widget::render(containers_table, sections[0], buf);
+    }
+
+    pub(super) fn container<'a>(area: Rect, buf: &mut Buffer, container: &'a ContainerInfo) {
+        let sections = Layout::vertical([
+            Constraint::Length(3),
+            Constraint::Fill(1),
+            Constraint::Fill(1),
+        ])
+        .split(area);
+
+        let info = Paragraph::new(text::Line::from(container.name.as_str()));
+
+        Widget::render(info, sections[0], buf);
     }
 }
